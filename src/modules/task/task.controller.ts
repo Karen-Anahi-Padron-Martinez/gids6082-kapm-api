@@ -6,6 +6,7 @@ import {
   Delete,
   Param,
   Body,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 
@@ -14,29 +15,28 @@ export class TaskController {
   constructor(private taskSvc: TaskService) {}
 
   @Get()
-  public getTasks(): string {
+  public getTasks(): any[] {
     return this.taskSvc.getTasks();
   }
 
   @Get(':id')
-  public getTaskById(@Param('id') id: string) {
-    return this.taskSvc.getTasksById(parseInt(id));
+  public getTaskById(@Param('id',ParseIntPipe) id: number): any{
+    console.log(typeof id)
+    return this.taskSvc.getTasksById(id);
   }
 
   @Post()
   public insertTask(@Body() task: any) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.taskSvc.insert(task);
   }
 
   @Put(':id')
-  public updateTask(@Param('id') id: string, @Body() task: any) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.taskSvc.update(parseInt(id), task);
+  public updateTask(@Param('id',ParseIntPipe) id: number, @Body() task: any) {
+    return this.taskSvc.update(id, task);
   }
 
   @Delete(':id')
-  public deleteTask(@Param('id') id: string) {
-    return this.taskSvc.delete(parseInt(id));
+  public deleteTask(@Param('id',ParseIntPipe) id: number) {
+    return this.taskSvc.delete(id);
   }
 }

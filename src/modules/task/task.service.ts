@@ -1,17 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateTaskDto } from '../auth/dto/create-task.dto';
 
 @Injectable()
 export class TaskService {
+
+  constructor(
+    @Inject('MYSQL_CONNECTION') private db:any
+  ){}
+
   private tasks: any[] = [];
 
-  public getTasks(): any[] {
-    return this.tasks;
+  public getTasks(): Promise<any> {
+    const query ='SELECT * FROM tasks';
+    const [result]:any = await this.db.query(query);
+
+    return result;
   }
 
   public getTasksById(id: number): any {
-    var task = this.tasks.find((t) => t.id == id);
-    return task;
+    const query ='SELECT * FROM tasks WHERE id='${''
   }
 
   public insert(task: CreateTaskDto): any {

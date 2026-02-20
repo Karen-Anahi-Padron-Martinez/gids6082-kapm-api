@@ -11,18 +11,19 @@ import {
 import { TaskService } from './task.service';
 
 @Controller('api/task')
+
 export class TaskController {
   constructor(private taskSvc: TaskService) {}
 
   @Get()
-  public getTasks(): any[] {
+  public getTasks(): Promise<any> {
     return this.taskSvc.getTasks();
   }
 
   @Get(':id')
-  public getTaskById(@Param('id',ParseIntPipe) id: number): any{
+  public getTaskById(@Param('id',ParseIntPipe) id: number): Promise<any>{
     console.log(typeof id)
-    return this.taskSvc.getTasksById(id);
+    return await this.taskSvc.getTasksById(id);
   }
 
   @Post()

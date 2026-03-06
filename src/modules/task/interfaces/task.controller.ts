@@ -30,7 +30,7 @@ export class TaskController {
   public async getTaskById(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Task> {
-    console.log(typeof id); // number
+    console.log(typeof id); 
 
     const result = await this.taskSvc.getTasksById(id);
 
@@ -65,11 +65,12 @@ export class TaskController {
 
   @Delete(':id')
   public async deleteTask(@Param('id', ParseIntPipe) id: number): Promise<boolean> {
-    const result = await this.taskSvc.delete(id);
+    try{
+      await this.taskSvc.delete(id);
 
-    if (!result)
-      throw new HttpException("No se puede eliminar la tarea", HttpStatus.NOT_FOUND)
-    
-    return result;
+    }catch(error){
+      throw new HttpException("Task not found", HttpStatus.NOT_FOUND)
+    }
+    return true;
   }
 }

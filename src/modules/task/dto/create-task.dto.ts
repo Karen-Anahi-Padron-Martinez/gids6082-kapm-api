@@ -24,7 +24,9 @@ export class CreateTaskDto{
     @IsNumber()
     @IsInt()
     @ApiProperty({ description: 'user_id', example: 1})
-        user_id: number;
+    user_id: number;
     
+    
+
 
 }

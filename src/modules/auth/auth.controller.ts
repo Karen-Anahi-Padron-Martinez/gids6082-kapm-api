@@ -1,9 +1,10 @@
-import { Body,Controller, Get, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { Body,Controller, Get, HttpException, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiOperation } from '@nestjs/swagger';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { LoginDto } from './dto/login';
 import { User } from '../user/entities/user.entity';
+import { AuthGuard } from 'src/common/guards/auth.guard';
 
 @Controller('api/auth')
 export class AuthController {
@@ -26,8 +27,13 @@ public async login(@Body() user: LoginDto): Promise<User> {
 }
 
   @Get("me")
+  @ApiOperation({summary:"Extrae el id del usuario desde el token y busca la imformacion"})
+  @UseGuards(AuthGuard)
+
   @ApiOperation({ summary: "Extrae el ID del usuario desde el token y busca la informacion"})
   public getProfile(){}
 
   public refreshToken(){}
+
+  public logout(){}
 }

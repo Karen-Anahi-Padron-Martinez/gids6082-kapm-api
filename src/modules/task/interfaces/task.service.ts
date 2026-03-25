@@ -12,14 +12,18 @@ export class TaskService {
 
   private tasks: any[] = [];
 
-  public async getTasks(): Promise<any> {
-    const tasks = await this.prisma.task.findMany();
+  public async getTasks(user_id): Promise<any> {
+    const tasks = await this.prisma.task.findMany({
+      where: {
+        user_id
+      }
+    });
     return tasks;
   }
 
-  public async getTasksById(id: number): Promise<Task | null> {
+  public async getTasksById(id: number,user_id:number): Promise<Task | null> {
     const task = await this.prisma.task.findUnique({
-      where: {id: id}
+      where: {id, user_id}
     });
     return task;
   }
@@ -31,9 +35,9 @@ export class TaskService {
     return newTask;
   }
 
-  public async update(id: number, taskUpdate:UpdateTaskDto): Promise<Task> {
+  public async update(id: number, user_id:number,taskUpdate:UpdateTaskDto): Promise<Task> {
     const task = await this.prisma.task.update({
-      where: { id: id},
+      where: { id,user_id},
       data: taskUpdate
     });
     return task;
@@ -41,9 +45,9 @@ export class TaskService {
     //git commit -a -m "fix:CRUD a base de datos Provider (List, ListById, insert)"
   }
 
-  public async delete(id: number): Promise<Task> {
+  public async delete(id: number,user_id:number): Promise<Task> {
   const task = await this.prisma.task.delete({
-    where: { id }
+    where: { id ,user_id}
   });
 
   return task;

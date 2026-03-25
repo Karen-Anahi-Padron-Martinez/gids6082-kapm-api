@@ -21,9 +21,7 @@ export class CreateTaskDto{
     @ApiProperty({ description: 'priority', example: false})
     priority: boolean;
     
-    @IsNumber()
-    @IsInt()
-    @ApiProperty({ description: 'user_id', example: 1})
+   
     user_id: number;
     
     

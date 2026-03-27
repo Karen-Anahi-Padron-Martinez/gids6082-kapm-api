@@ -66,4 +66,11 @@ export class AuthService {
       refreshToken
     } as any;
   }
+
+  public async updateHash(user_id:number, hash:string|null):Promise<User>{
+    return await this.prisma.user.update({
+      where:{id: user_id},
+      data:{ hash }
+    });
+  }
 }

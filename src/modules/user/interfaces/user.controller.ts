@@ -15,7 +15,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from '../dto/create-user';
 import { UpdateUserDto } from '../dto/update-user';
 import { UtilService } from 'src/common/services/util.service';
-import { User } from 'src/generated/prisma/client';
+import { User } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 

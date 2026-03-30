@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
 import { UtilService } from 'src/common/services/util.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login';
-import { User } from '../user/entities/user.entity';
+import { User } from 'src/modules/user/entities/user.entity';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class AuthService {
@@ -14,63 +14,22 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async login(userLogin: LoginDto): Promise<User | null> {
-
-    // buscar usuario por username
-    const user = await this.prisma.user.findUnique({
-      where: { username: userLogin.username }
+  public async getUserByUsername(username: string): Promise <User | null> {
+    return await this.prisma.user.findFirst({
+      where: {username}
     });
-
-    if (!user) {
-      return null;
-    }
-
-    // validar contraseña
-    const validPassword = await this.utilService.comparePassword(
-      userLogin.password,
-      user.password
-    );
-
-    if (!validPassword) {
-      return null;
-    }
-
-    // generar payload
-    const payload = {
-      id: user.id,
-      name: user.name,
-      lastname: user.lastname,
-      created_At: user.created_at
-    };
-
-    // access token (60s)
-    const accessToken = this.jwtService.sign(payload, {
-      expiresIn: '60s'
-    });
-
-    // refresh token (7 días)
-    const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: '7d'
-    });
-
-    // guardar refresh token
-    await this.prisma.user.update({
-      where: { id: user.id },
-      data: { refreshToken }
-    });
-
-    // agregar tokens al objeto usuario (opcional)
-    return {
-      ...user,
-      accessToken,
-      refreshToken
-    } as any;
   }
 
-  public async updateHash(user_id:number, hash:string|null):Promise<User>{
+  public async getUserById (id: number): Promise<User | null> {
+    return await this.prisma.user.findFirst({
+      where: {id}
+    });
+  }
+
+  public async updateHash(user_id: number, hash: string | null): Promise<User> {
     return await this.prisma.user.update({
-      where:{id: user_id},
-      data:{ hash }
+      where: {id: user_id},
+      data : {hash}
     });
   }
 }

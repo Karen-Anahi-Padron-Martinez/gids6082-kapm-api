@@ -33,4 +33,8 @@ export class UtilService {
     public async generateToken(payload: any): Promise<string> {
         return this.jwtService.sign(payload);
     }
+
+     public async generateJWTPayload(payload: any, expiresIn: string): Promise<string> {
+        return this.jwtService.sign(payload, { expiresIn:'1h' });
+    }
 }

@@ -29,6 +29,7 @@ model User {
   rol_id Int?
   rol Rol? @relation(fields: [rol_id],references: [id])
   tasks Task[]
+  logs Logs[]
   
 }
 
@@ -43,3 +44,14 @@ model Task{
 
 }
 
+model Logs {
+  id Int @default(autoincrement()) @id
+  statusCode Int
+  timestamp DateTime 
+  path String @db.MediumText()
+  error String @db.MediumText()
+  errorCode String @db.MediumText()
+  session_id Int?
+
+  user User? @relation(fields: [session_id], references: [id])
+}
